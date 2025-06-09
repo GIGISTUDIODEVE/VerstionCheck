@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>MyApp Launcher</title>
+</head>
+<body>
+  <!-- WebGL 빌드나 일반 콘텐츠 -->
+
+  <script>
+    // ① 플레이 카운트 업
+    document.addEventListener('DOMContentLoaded', () => {
+      beaconCountUp();
+      loadVersionConfig();
+    });
+
+    function beaconCountUp() {
+      const url = 'https://example.com/api/play-count'
+                + '?game=my-app'
+                + '&_=' + Date.now();
+      new Image().src = url;
+    }
+
+    // ② version.json 읽어서 버전 비교/화면 표시
+    async function loadVersionConfig() {
+      try {
+        const resp = await fetch('version.json');
+        if (!resp.ok) throw new Error(resp.status);
+        const cfg = await resp.json();
+        console.log('최신 버전:', cfg.latest_version);
+        console.log('스토어 URL:', cfg.storeUrl);
+        // 필요하다면 UI 업데이트…
+      }
+      catch (e) {
+        console.error('버전 정보 로드 실패:', e);
+      }
+    }
+  </script>
+</body>
+</html>
